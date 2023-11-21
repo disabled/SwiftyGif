@@ -9,6 +9,7 @@ import UIKit
 
 @objc public protocol SwiftyGifDelegate {
     @objc optional func gifDidStart(sender: UIImageView)
+    @objc optional func gifDidUpdate(sender: UIImageView, image: UIImage?)
     @objc optional func gifDidLoop(sender: UIImageView)
     @objc optional func gifDidStop(sender: UIImageView)
     @objc optional func gifURLDidFinish(sender: UIImageView)
@@ -412,7 +413,12 @@ public extension UIImageView {
     
     var currentImage: UIImage? {
         get { return possiblyNil(_currentImageKey) }
-        set { objc_setAssociatedObject(self, _currentImageKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        set {
+            if newValue !== currentImage {
+                delegate?.gifDidUpdate?(sender: self, image: newValue)
+            }
+            objc_setAssociatedObject(self, _currentImageKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
     }
     
     private var displayOrderIndex: Int {
