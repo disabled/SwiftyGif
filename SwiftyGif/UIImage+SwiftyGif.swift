@@ -95,7 +95,10 @@ public extension UIImage {
         self.imageSource = imageSource
         imageData = data
         
-        calculateFrameDelay(try delayTimes(imageSource), levelOfIntegrity: levelOfIntegrity)
+        let frameDelays = try delayTimes(imageSource)
+        self.frameDelays = frameDelays
+
+        calculateFrameDelay(frameDelays, levelOfIntegrity: levelOfIntegrity)
         calculateFrameSize()
     }
     
@@ -292,6 +295,7 @@ private let _imageSizeKey = malloc(4)
 private let _imageCountKey = malloc(4)
 private let _displayOrderKey = malloc(4)
 private let _imageDataKey = malloc(4)
+private let _frameDelaysKey = malloc(4)
 
 public extension UIImage {
     
@@ -304,28 +308,33 @@ public extension UIImage {
             objc_setAssociatedObject(self, _imageSourceKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    
-    var displayRefreshFactor: Int?{
+
+    var frameDelays: [Float]? {
+        get { return objc_getAssociatedObject(self, _frameDelaysKey!) as? [Float] }
+        set { objc_setAssociatedObject(self, _frameDelaysKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+
+    var displayRefreshFactor: Int? {
         get { return objc_getAssociatedObject(self, _displayRefreshFactorKey!) as? Int }
         set { objc_setAssociatedObject(self, _displayRefreshFactorKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var imageSize: Int?{
+    var imageSize: Int? {
         get { return objc_getAssociatedObject(self, _imageSizeKey!) as? Int }
         set { objc_setAssociatedObject(self, _imageSizeKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var imageCount: Int?{
+    var imageCount: Int? {
         get { return objc_getAssociatedObject(self, _imageCountKey!) as? Int }
         set { objc_setAssociatedObject(self, _imageCountKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var displayOrder: [Int]?{
+    var displayOrder: [Int]? {
         get { return objc_getAssociatedObject(self, _displayOrderKey!) as? [Int] }
         set { objc_setAssociatedObject(self, _displayOrderKey!, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
-    var imageData:Data? {
+    var imageData: Data? {
         get {
             let result = objc_getAssociatedObject(self, _imageDataKey!)
             return result == nil ? nil : (result as? Data)
