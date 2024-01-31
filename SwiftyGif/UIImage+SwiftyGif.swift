@@ -11,7 +11,7 @@ public typealias GifLevelOfIntegrity = Float
 
 extension GifLevelOfIntegrity {
     public static let highestNoFrameSkipping: GifLevelOfIntegrity = 1
-    public static let `default`: GifLevelOfIntegrity = 0.8
+    public static let `default`: GifLevelOfIntegrity = 1
     public static let lowForManyGifs: GifLevelOfIntegrity = 0.5
     public static let lowForTooManyGifs: GifLevelOfIntegrity = 0.2
     public static let superLowForSlideShow: GifLevelOfIntegrity = 0.1
