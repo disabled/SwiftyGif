@@ -77,7 +77,8 @@ open class SwiftyGifManager {
         #else
         
         timer = CADisplayLink(target: self, selector: #selector(updateImageView))
-        
+        timer?.preferredFramesPerSecond = 60
+
         timer?.add(to: .main, forMode: mode)
         
         #endif
